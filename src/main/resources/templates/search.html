@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rechercher un étudiant - Gestion Parcours</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fb;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo i {
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: #4c1d95;
+            margin-right: 8px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: #4c1d95;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 48px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.1);
+        }
+        
+        h3 {
+            font-size: 30px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+        }
+        
+        .subtitle {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        label i {
+            margin-right: 8px;
+            color: #4c1d95;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 12px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #4c1d95;
+            box-shadow: 0 0 0 3px rgba(76,29,149,0.1);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 24px 0;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .divider span {
+            padding: 0 16px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(76,29,149,0.3);
+        }
+        
+        .error-message {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 14px;
+            border-radius: 12px;
+            margin-top: 24px;
+            color: #b91c1c;
+        }
+        
+        @media (max-width: 640px) {
+            .card {
+                padding: 28px;
+            }
+            h3 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i> EduTrack
+            </div>
+            <div class="nav-links">
+                <a href="/etudiant/search"><i class="fas fa-search"></i> Recherche</a>
+                <a href="/api/etudiants" target="_blank"><i class="fas fa-database"></i> API</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3><i class="fas fa-user-graduate"></i> Rechercher un étudiant</h3>
+            <div class="subtitle">Entrez le nom ou le matricule pour consulter le parcours complet</div>
+            
+            <form th:action="@{/etudiant/parcours}" method="get">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> Nom complet</label>
+                    <input type="text" name="nom" placeholder="Ex: Mufungizi, Dieume, Kamala..." />
+                </div>
+                
+                <div class="divider">
+                    <span>ou</span>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> Matricule</label>
+                    <input type="text" name="matricule" placeholder="Ex: MU20240001, DI20240002..." />
+                </div>
+                
+                <button type="submit" class="btn"><i class="fas fa-arrow-right"></i> Voir le parcours</button>
+            </form>
+            
+            <p th:if="${error}" class="error-message" th:text="${error}"></p>
+        </div>
+    </div>
+</body>
+</html>
